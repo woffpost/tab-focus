@@ -1,0 +1,40 @@
+[
+  {"topic":"налоги Молдовы","tabs":[
+    {"on":true,"title":"Serviciul Fiscal de Stat","url":"https://www.sfs.md/"},
+    {"on":true,"title":"TVA Moldova 2026 - Google Search","url":"https://www.google.com/search?q=TVA+Moldova+2026"},
+    {"on":true,"title":"Cota TVA în Republica Moldova - ghid pentru afaceri","url":"https://example.md/ghid-tva"},
+    {"on":true,"title":"Подоходный налог в Молдове для ИП и компаний","url":"https://example.md/ru/podohodny-nalog"},
+    {"on":true,"title":"Codul fiscal al Republicii Moldova","url":"https://www.legis.md/cautare/getResults?doc_id=1"},
+    {"on":true,"title":"Moldova Tax Guide for Foreign Businesses","url":"https://example.com/moldova-tax"},
+    {"on":false,"title":"YouTube","url":"https://www.youtube.com/"},
+    {"on":false,"title":"Inbox (3) - Gmail","url":"https://mail.google.com/mail/u/0/#inbox"},
+    {"on":false,"title":"Рецепт борща с говядиной","url":"https://example.ru/borsch"},
+    {"on":false,"title":"useEffect – React","url":"https://react.dev/reference/react/useEffect"},
+    {"on":false,"title":"Weather in Chisinau","url":"https://example.com/weather/chisinau"},
+    {"on":false,"title":"Купить кроссовки Nike","url":"https://shop.example.com/nike"}
+  ]},
+  {"topic":"React","tabs":[
+    {"on":true,"title":"Hooks at a Glance","url":"https://legacy.reactjs.org/docs/hooks-overview.html"},
+    {"on":true,"title":"useEffect – React","url":"https://react.dev/reference/react/useEffect"},
+    {"on":true,"title":"Server Components | Next.js","url":"https://nextjs.org/docs/app/building-your-application/rendering/server-components"},
+    {"on":true,"title":"Как устроен виртуальный DOM в React","url":"https://habr.com/ru/articles/1/"},
+    {"on":true,"title":"Zustand: state management for React","url":"https://zustand.docs.pmnd.rs/"},
+    {"on":false,"title":"Python 3 documentation","url":"https://docs.python.org/3/"},
+    {"on":false,"title":"Booking.com: hotels in Rome","url":"https://www.booking.com/rome"},
+    {"on":false,"title":"Cota TVA în Republica Moldova","url":"https://example.md/ghid-tva"},
+    {"on":false,"title":"Netflix","url":"https://www.netflix.com/browse"},
+    {"on":false,"title":"Inbox (3) - Gmail","url":"https://mail.google.com/mail/u/0/#inbox"}
+  ]},
+  {"topic":"поездка в Италию","tabs":[
+    {"on":true,"title":"Booking.com: hotels in Rome","url":"https://www.booking.com/rome"},
+    {"on":true,"title":"Что посмотреть во Флоренции за 3 дня","url":"https://example.ru/florence"},
+    {"on":true,"title":"Cheap flights Chisinau to Milan","url":"https://www.skyscanner.net/routes/kiv/mil"},
+    {"on":true,"title":"Colosseum tickets - Official site","url":"https://example.it/colosseo"},
+    {"on":true,"title":"Виза в Италию для граждан Молдовы","url":"https://example.md/viza-italia"},
+    {"on":false,"title":"useEffect – React","url":"https://react.dev/reference/react/useEffect"},
+    {"on":false,"title":"Inbox (3) - Gmail","url":"https://mail.google.com/mail/u/0/#inbox"},
+    {"on":false,"title":"Serviciul Fiscal de Stat","url":"https://www.sfs.md/"},
+    {"on":false,"title":"GitHub - pull requests","url":"https://github.com/pulls"},
+    {"on":false,"title":"Рецепт борща с говядиной","url":"https://example.ru/borsch"}
+  ]}
+]

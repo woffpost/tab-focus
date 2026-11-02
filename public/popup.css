@@ -1,0 +1,71 @@
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --fg: #1c1c1e;
+  --muted: #6e6e73;
+  --line: #e0e0e4;
+  --accent: #1a73e8;
+  --warn: #c5481c;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #202124;
+    --fg: #f1f1f3;
+    --muted: #a0a0a6;
+    --line: #3c3d41;
+    --accent: #8ab4f8;
+    --warn: #f28b5b;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  width: 340px;
+  margin: 0;
+  padding: 14px;
+  background: var(--bg);
+  color: var(--fg);
+  font: 13px/1.4 system-ui, sans-serif;
+}
+[hidden] { display: none !important; }
+label { display: block; font-weight: 600; margin-bottom: 6px; }
+input:not([type="range"]) {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+button {
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--bg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+button.quiet { background: transparent; border: 1px solid var(--line); color: inherit; font-weight: 500; }
+button:disabled { opacity: 0.5; cursor: default; }
+.hint { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+#start button { width: 100%; margin-top: 10px; }
+#suggestions { list-style: none; margin: 8px 0 0; padding: 0; }
+#suggestions button { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; text-align: left; }
+#suggestions .count { flex: none; color: var(--muted); font-variant-numeric: tabular-nums; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+#current-topic { font-size: 15px; overflow-wrap: anywhere; }
+#verdict { margin-top: 12px; padding: 10px; border: 1px solid var(--warn); border-radius: 8px; }
+#verdict.on { border-color: var(--line); }
+#verdict p { margin: 0 0 8px; }
+#verdict button { flex: 1; }
+.threshold { margin-top: 12px; font-weight: 500; color: var(--muted); }
+.threshold input { width: 100%; margin: 4px 0 0; }
+#tabs { list-style: none; margin: 8px 0 0; padding: 0; max-height: 240px; overflow-y: auto; }
+#tabs li { display: flex; gap: 8px; padding: 4px 0; border-top: 1px solid var(--line); }
+#tabs .score { flex: none; width: 34px; font-variant-numeric: tabular-nums; color: var(--muted); }
+#tabs .on .score { color: var(--accent); font-weight: 600; }
+#tabs .title { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+#status { margin: 10px 0 0; color: var(--muted); }
+#status.error { color: var(--warn); }

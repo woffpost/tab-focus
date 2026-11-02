@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Focus",
+  "version": "0.1.0",
+  "description": "Назови тему — вкладки по ней окажутся рядом, а остальные свернутся в отдельную группу.",
+  "permissions": ["tabs", "tabGroups", "storage", "offscreen"],
+  "action": { "default_popup": "popup.html", "default_title": "Tab Focus" },
+  "background": { "service_worker": "background.js", "type": "module" },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}
