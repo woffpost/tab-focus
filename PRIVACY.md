@@ -8,7 +8,7 @@ Effective date: November 2, 2026
 
 To compare your tabs with your topic, Tab Focus reads the following on your computer:
 
-- the titles and addresses of tabs in the window where you start a focus session;
+- the titles and addresses of tabs in the window where you start a focus session or ask for topic suggestions;
 - the topic you type;
 - your "on topic" and "remove" choices, and when you last left a tab.
 
@@ -37,4 +37,4 @@ The use of information received from Chrome APIs adheres to the Chrome Web Store
 
 ## Changes and contact
 
-Changes to this policy are published in this file, and its history is public in this repository. Questions can be asked in the [project's issues](https://github.com/woffpost/tab-focus/issues).
+Changes to this policy are published in this file, and its history is public in this repository. Questions can be asked in the [project's issues](https://github.com/woffpost/tab-focus/issues) or by email at woffpost@gmail.com.
