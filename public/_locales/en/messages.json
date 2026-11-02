@@ -61,5 +61,11 @@
   },
   "statusFailed": {
     "message": "Something went wrong: $1"
+  },
+  "sectionOn": {
+    "message": "On topic"
+  },
+  "justNow": {
+    "message": "just now"
   }
 }

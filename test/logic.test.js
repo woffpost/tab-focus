@@ -13,6 +13,7 @@ import {
   learn,
   neighbour,
   placement,
+  tabLists,
 } from '../src/logic.js';
 
 const session = { windowId: 1, focusGroupId: 10, offGroupId: 20 };
@@ -168,4 +169,18 @@ test('leftover groups are recognised by title, the user groups are not', () => {
   assert.equal(isOwnGroupTitle('🎯 налоги Молдовы'), true);
   assert.equal(isOwnGroupTitle('Работа'), false);
   assert.equal(isOwnGroupTitle(undefined), false);
+});
+
+test('lists keep on-topic tabs by score and recently left off-topic tabs first', () => {
+  const tabs = [
+    { id: 1, on: true, score: 0.5 },
+    { id: 2, on: true, score: 0.9 },
+    { id: 3, on: false, score: 0.1 },
+    { id: 4, on: false, score: 0.3 },
+    { id: 5, on: false, score: 0.01, leftAt: 100 },
+    { id: 6, on: false, score: 0.02, leftAt: 200 },
+  ];
+  const { on, off } = tabLists(tabs);
+  assert.deepEqual(on.map(({ id }) => id), [2, 1]);
+  assert.deepEqual(off.map(({ id }) => id), [6, 5, 4, 3]);
 });

@@ -31,7 +31,12 @@
     <label class="threshold"><span data-i18n="thresholdLabel"></span> <output id="threshold-value"></output>
       <input id="threshold" type="range" min="0.05" max="0.8" step="0.01" />
     </label>
-    <ul id="tabs"></ul>
+    <div id="lists">
+      <h2><span data-i18n="sectionOn"></span> <span id="on-count" class="count"></span></h2>
+      <ul id="tabs-on" class="tabs"></ul>
+      <h2><span data-i18n="offGroupTitle"></span> <span id="off-count" class="count"></span></h2>
+      <ul id="tabs-off" class="tabs"></ul>
+    </div>
   </section>
 
   <p id="status" role="status" hidden></p>

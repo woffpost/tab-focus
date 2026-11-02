@@ -54,6 +54,21 @@ export async function collapseOff(state) {
   });
 }
 
+// The count shows how much sits inside a collapsed group. Only cosmetic, so it never fails the caller.
+export async function syncOffTitle(state) {
+  if (state.offGroupId == null) return;
+  try {
+    const [group, tabs] = await Promise.all([
+      chrome.tabGroups.get(state.offGroupId),
+      chrome.tabs.query({ groupId: state.offGroupId }),
+    ]);
+    const title = `${OFF_TITLE_PREFIX}${t('offGroupTitle')} · ${tabs.length}`;
+    if (group.title !== title) await chrome.tabGroups.update(state.offGroupId, { title });
+  } catch (error) {
+    if (!GROUP_GONE.test(error.message)) console.warn('[tab-focus]', error);
+  }
+}
+
 // Moves tabs in batches, so a long list shifts once instead of tab by tab.
 export async function placeTabs(state, tabs) {
   const targets = Map.groupBy(tabs, (tab) => placement(tab, state.tabs[tab.id], state));

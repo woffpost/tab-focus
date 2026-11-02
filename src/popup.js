@@ -1,4 +1,5 @@
 import { t } from './i18n.js';
+import { tabLists } from './logic.js';
 
 /** @type {(id: string) => any} */
 const $ = (id) => document.getElementById(id);
@@ -55,18 +56,38 @@ async function renderVerdict(state) {
   $('mark-off').hidden = !record.on && tab.groupId === state.offGroupId;
 }
 
-function renderTabs(records) {
-  const rows = records
-    .toSorted((a, b) => b.score - a.score)
-    .map(({ title, score, on }) =>
-      el(
-        'li',
-        { className: on ? 'on' : '' },
-        el('span', { className: 'score', textContent: score.toFixed(2) }),
-        el('span', { className: 'title', textContent: title, title }),
-      ),
-    );
-  $('tabs').replaceChildren(...rows);
+function timeAgo(time) {
+  const minutes = Math.floor((Date.now() - time) / 60_000);
+  if (minutes < 1) return t('justNow');
+  const format = new Intl.RelativeTimeFormat(chrome.i18n.getUILanguage(), { style: 'narrow' });
+  return minutes < 60 ? format.format(-minutes, 'minute') : format.format(-Math.floor(minutes / 60), 'hour');
+}
+
+async function openTab(id, windowId) {
+  await chrome.tabs.update(id, { active: true });
+  await chrome.windows.update(windowId, { focused: true });
+  window.close();
+}
+
+function tabRow({ id, title, score, leftAt }, windowId, showAge) {
+  const button = el(
+    'button',
+    { type: 'button', className: 'tab', title, onclick: () => openTab(id, windowId) },
+    el('span', { className: 'score', textContent: score.toFixed(2) }),
+    el('span', { className: 'title', textContent: title }),
+  );
+  if (showAge && leftAt) button.append(el('span', { className: 'ago', textContent: timeAgo(leftAt) }));
+  return el('li', {}, button);
+}
+
+function renderTabs(state) {
+  const records = Object.entries(state.tabs).map(([id, record]) => ({ ...record, id: Number(id) }));
+  const { on, off } = tabLists(records);
+  $('on-count').textContent = on.length;
+  $('off-count').textContent = off.length;
+  $('tabs-on').replaceChildren(...on.map((record) => tabRow(record, state.windowId, false)));
+  // Time since leaving matters only for tabs that went out of sight.
+  $('tabs-off').replaceChildren(...off.map((record) => tabRow(record, state.windowId, true)));
 }
 
 async function render() {
@@ -86,7 +107,7 @@ async function render() {
   $('current-topic').textContent = state.topic;
   $('threshold').value = state.threshold;
   showThreshold(state.threshold, state.autoThreshold);
-  renderTabs(Object.values(state.tabs));
+  renderTabs(state);
   await renderVerdict(state);
 }
 

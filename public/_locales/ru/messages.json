@@ -61,5 +61,11 @@
   },
   "statusFailed": {
     "message": "Не получилось: $1"
+  },
+  "sectionOn": {
+    "message": "По теме"
+  },
+  "justNow": {
+    "message": "только что"
   }
 }

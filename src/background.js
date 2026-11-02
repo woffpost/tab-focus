@@ -1,6 +1,6 @@
 import { closeModel, embed, isEmbedding } from './embedder.js';
 import { t } from './i18n.js';
-import { collapseOff, dissolveGroups, getTab, placeTabs, setBadge } from './groups.js';
+import { collapseOff, dissolveGroups, getTab, placeTabs, setBadge, syncOffTitle } from './groups.js';
 import {
   LEARNED_THRESHOLD,
   MIN_THRESHOLD,
@@ -42,6 +42,7 @@ const withState = (change) =>
     if (!state.active) return;
     try {
       await change(state);
+      await syncOffTitle(state);
     } finally {
       await save(state);
     }
@@ -71,7 +72,7 @@ async function measure(state, tab) {
   if (sameUrl && (known.manual || known.title === tab.title)) return;
 
   const vector = await embed(tab.title);
-  state.tabs[tab.id] = { url: tab.url, title: tab.title, vector, ...judge(vector, state) };
+  state.tabs[tab.id] = { url: tab.url, title: tab.title, vector, leftAt: known?.leftAt, ...judge(vector, state) };
 }
 
 // Works on fresh tabs: the event may have waited in the queue, and embedding takes time,
@@ -150,6 +151,7 @@ async function start({ topic, vector, tabIds = [] }) {
   // A suggestion's vector is built from pages, and pages score high against each other.
   state.threshold = fromSuggestion ? LEARNED_THRESHOLD : autoThreshold(Object.values(state.tabs));
   await rejudgeAll(state);
+  await syncOffTitle(state);
   await save(state);
   await chrome.storage.session.remove('suggestions');
   await report(null);
@@ -248,7 +250,9 @@ chrome.tabs.onActivated.addListener(({ tabId, windowId }) => {
     if (windowId !== state.windowId) return;
     const previous = state.lastActiveTabId;
     state.lastActiveTabId = tabId;
-    if (state.tabs[previous]?.on === false) await settle(state, previous);
+    const left = state.tabs[previous];
+    if (left) left.leftAt = Date.now();
+    if (left?.on === false) await settle(state, previous);
     await collapseOff(state);
   });
 });

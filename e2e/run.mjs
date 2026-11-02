@@ -107,6 +107,27 @@ try {
   await until('moved on leave', async () => (await tabByTitle(distraction)).groupId === s.offGroupId);
   console.log('ok: moved after leaving');
 
+  await until('count on the off group', async () => {
+    const { offGroupId } = await state();
+    const [group, inside] = await inTab(
+      async (groupId) => [await chrome.tabGroups.get(groupId), await chrome.tabs.query({ groupId })],
+      offGroupId,
+    );
+    return group.title.endsWith(`· ${inside.length}`);
+  });
+  await popup.evaluate(() => {
+    globalThis.close = () => {};
+  });
+  const leftRow = popup.locator('#tabs-off button').first();
+  await until('left tab on top', async () => (await leftRow.textContent()).includes(distraction));
+  if (SHOTS) await popup.screenshot({ path: join(SHOTS, 'session.png') });
+  await leftRow.click();
+  await until('row opens the tab', async () => (await tabByTitle(distraction)).active);
+  assert.equal((await inTab((g) => chrome.tabGroups.get(g), s.offGroupId)).collapsed, false, 'its group opens');
+  await inTab((id) => chrome.tabs.update(id, { active: true }), (await tabByTitle(onRu)).id);
+  await until('group folds again', async () => (await inTab((g) => chrome.tabGroups.get(g), s.offGroupId)).collapsed);
+  console.log('ok: a tab that went off topic is found and opened from the popup');
+
   const related = 'Declarația fiscală online';
   await open(related);
   await until('related classified', async () => {

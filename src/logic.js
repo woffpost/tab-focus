@@ -61,6 +61,16 @@ export function placement(tab, { on }, { focusGroupId, offGroupId }) {
   return 'off';
 }
 
+// The off-topic tab the user just left is the one they come back for, so recent ones go first.
+export function tabLists(tabs) {
+  const byScore = (a, b) => b.score - a.score;
+  const byRecency = (a, b) => (b.leftAt ?? 0) - (a.leftAt ?? 0) || byScore(a, b);
+  return {
+    on: tabs.filter(({ on }) => on).toSorted(byScore),
+    off: tabs.filter(({ on }) => !on).toSorted(byRecency),
+  };
+}
+
 // Where to go when the user dismisses the current tab: the closest one that stays in sight.
 export function neighbour(tab, tabs, { offGroupId }) {
   const distance = ({ index }) => Math.abs(index - tab.index);

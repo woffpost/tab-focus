@@ -6,6 +6,7 @@
   --line: #e0e0e4;
   --accent: #1a73e8;
   --warn: #c5481c;
+  --hover: rgba(0, 0, 0, 0.05);
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -15,6 +16,7 @@
     --line: #3c3d41;
     --accent: #8ab4f8;
     --warn: #f28b5b;
+    --hover: rgba(255, 255, 255, 0.08);
   }
 }
 * { box-sizing: border-box; }
@@ -62,10 +64,17 @@ button:disabled { opacity: 0.5; cursor: default; }
 #verdict button { flex: 1; }
 .threshold { margin-top: 12px; font-weight: 500; color: var(--muted); }
 .threshold input { width: 100%; margin: 4px 0 0; }
-#tabs { list-style: none; margin: 8px 0 0; padding: 0; max-height: 240px; overflow-y: auto; }
-#tabs li { display: flex; gap: 8px; padding: 4px 0; border-top: 1px solid var(--line); }
-#tabs .score { flex: none; width: 34px; font-variant-numeric: tabular-nums; color: var(--muted); }
-#tabs .on .score { color: var(--accent); font-weight: 600; }
-#tabs .title { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+#lists { margin-top: 12px; max-height: 280px; overflow-y: auto; }
+#lists h2 { display: flex; justify-content: space-between; margin: 10px 0 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
+#lists h2:first-child { margin-top: 0; }
+#lists .count { font-variant-numeric: tabular-nums; }
+.tabs { list-style: none; margin: 0; padding: 0; }
+.tabs li { border-top: 1px solid var(--line); }
+button.tab { display: flex; gap: 8px; width: 100%; padding: 4px; border-radius: 0; background: transparent; color: inherit; font-weight: 400; text-align: left; }
+button.tab:hover { background: var(--hover); }
+.tab .score { flex: none; width: 34px; font-variant-numeric: tabular-nums; color: var(--muted); }
+#tabs-on .score { color: var(--accent); font-weight: 600; }
+.tab .title { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.tab .ago { flex: none; color: var(--muted); font-size: 12px; }
 #status { margin: 10px 0 0; color: var(--muted); }
 #status.error { color: var(--warn); }
