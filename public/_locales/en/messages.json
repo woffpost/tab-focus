@@ -50,9 +50,6 @@
   "statusLoadingModel": {
     "message": "Loading the model…"
   },
-  "statusModelProgress": {
-    "message": "Loading the model: $1%"
-  },
   "statusReadingTabs": {
     "message": "Looking at the tabs…"
   },

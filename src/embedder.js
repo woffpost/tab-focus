@@ -3,9 +3,6 @@
 // Lives as long as the worker, which keeps it small. Picking a suggestion repeats
 // the titles just embedded, and this saves reloading the model for them.
 const vectors = new Map();
-let inFlight = 0;
-
-export const isEmbedding = () => inFlight > 0;
 
 async function request(text) {
   if (!(await chrome.offscreen.hasDocument())) {
@@ -22,14 +19,9 @@ async function request(text) {
 
 export async function embed(text) {
   if (vectors.has(text)) return vectors.get(text);
-  inFlight += 1;
-  try {
-    const vector = await request(text);
-    vectors.set(text, vector);
-    return vector;
-  } finally {
-    inFlight -= 1;
-  }
+  const vector = await request(text);
+  vectors.set(text, vector);
+  return vector;
 }
 
 export async function closeModel() {

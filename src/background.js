@@ -1,4 +1,4 @@
-import { closeModel, embed, isEmbedding } from './embedder.js';
+import { closeModel, embed } from './embedder.js';
 import { t } from './i18n.js';
 import { collapseOff, dissolveGroups, getTab, placeTabs, setBadge, syncOffTitle } from './groups.js';
 import {
@@ -223,11 +223,6 @@ const handlers = {
 };
 
 chrome.runtime.onMessage.addListener((message, _sender, respond) => {
-  if (message.type === 'model-progress') {
-    // A download outlives a restarted worker, and nothing would clear the status afterwards.
-    if (isEmbedding()) report({ text: t('statusModelProgress', message.progress) });
-    return undefined;
-  }
   const handler = handlers[message.type];
   if (!handler) return undefined;
   handler(message).then(

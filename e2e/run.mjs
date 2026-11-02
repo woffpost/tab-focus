@@ -23,6 +23,8 @@ const context = await chromium.launchPersistentContext(profile, {
   args: [
     `--disable-extensions-except=${dist}`,
     `--load-extension=${dist}`,
+    // No DNS except localhost: the extension has to work with no network at all.
+    '--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE localhost',
     ...(process.env.E2E_LANG ? [`--lang=${process.env.E2E_LANG}`] : []),
   ],
 });

@@ -12,9 +12,10 @@ await build({
   bundle: true,
   format: 'esm',
   target: 'chrome117',
-  minify: true,
   logLevel: 'warning',
 });
+
+cpSync('models', 'dist/models', { recursive: true });
 
 mkdirSync('dist/ort');
 for (const file of ['ort-wasm-simd-threaded.asyncify.mjs', 'ort-wasm-simd-threaded.asyncify.wasm']) {
