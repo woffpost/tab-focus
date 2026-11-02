@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html>
 <head>
   <meta charset="utf-8" />
   <title>Tab Focus</title>
@@ -7,28 +7,28 @@
 </head>
 <body>
   <form id="start">
-    <label for="topic">На чём фокусируемся?</label>
-    <input id="topic" placeholder="например, AI-агенты, LLM, Claude API" autocomplete="off" maxlength="80" required autofocus />
-    <p class="hint">Опиши предмет, а не цель: точнее работает «AI-агенты, LLM», чем «хочу стать AI Engineer».</p>
-    <button type="submit">Включить фокус</button>
-    <button type="button" id="suggest" class="quiet">Предложить темы из вкладок</button>
+    <label for="topic" data-i18n="topicLabel"></label>
+    <input id="topic" data-i18n-placeholder="topicPlaceholder" autocomplete="off" maxlength="80" required autofocus />
+    <p class="hint" data-i18n="topicHint"></p>
+    <button type="submit" data-i18n="startButton"></button>
+    <button type="button" id="suggest" class="quiet" data-i18n="suggestButton"></button>
     <ul id="suggestions"></ul>
-    <p id="no-suggestions" class="hint" hidden>Явных тем не нашлось: вкладки слишком разные. Опиши тему сам.</p>
+    <p id="no-suggestions" class="hint" data-i18n="noSuggestions" hidden></p>
   </form>
 
   <section id="session" hidden>
     <div class="row">
       <strong id="current-topic"></strong>
-      <button id="stop" class="quiet">Выйти</button>
+      <button id="stop" class="quiet" data-i18n="stopButton"></button>
     </div>
     <div id="verdict" hidden>
       <p id="verdict-text" role="status"></p>
       <div class="row">
-        <button id="mark-on" class="quiet">Это по теме</button>
-        <button id="mark-off" class="quiet">Убрать</button>
+        <button id="mark-on" class="quiet" data-i18n="markOnButton"></button>
+        <button id="mark-off" class="quiet" data-i18n="markOffButton"></button>
       </div>
     </div>
-    <label class="threshold">Порог <output id="threshold-value"></output>
+    <label class="threshold"><span data-i18n="thresholdLabel"></span> <output id="threshold-value"></output>
       <input id="threshold" type="range" min="0.05" max="0.8" step="0.01" />
     </label>
     <ul id="tabs"></ul>

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Chrome extension that groups tabs by a topic using a local embedding model.",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "engines": {
     "node": ">=22"
@@ -15,7 +15,8 @@
     "typecheck": "tsc",
     "check": "npm run lint && npm run typecheck && npm test",
     "e2e": "npm run build && node e2e/run.mjs",
-    "eval": "node eval/run.mjs"
+    "eval": "node eval/run.mjs",
+    "icons": "node scripts/render-icons.mjs"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.2"

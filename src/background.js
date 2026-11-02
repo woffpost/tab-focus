@@ -1,4 +1,5 @@
 import { closeModel, embed, isEmbedding } from './embedder.js';
+import { t } from './i18n.js';
 import { collapseOff, dissolveGroups, getTab, placeTabs, setBadge } from './groups.js';
 import {
   LEARNED_THRESHOLD,
@@ -104,7 +105,7 @@ async function suggest() {
   const tabsByTitle = Map.groupBy(tabs.filter(hasReadableTitle), ({ title }) => title);
   const titles = [...tabsByTitle.keys()];
 
-  await report({ text: 'Смотрю на вкладки…' });
+  await report({ text: t('statusReadingTabs') });
   try {
     const vectors = [];
     for (const title of titles) vectors.push(await embed(title));
@@ -125,7 +126,7 @@ async function suggest() {
 async function start({ topic, vector, tabIds = [] }) {
   const fromSuggestion = tabIds.length > 0;
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  await report({ text: 'Загружаю модель…' });
+  await report({ text: t('statusLoadingModel') });
   vector ??= await embed(topic);
   const state = {
     active: true,
@@ -138,7 +139,7 @@ async function start({ topic, vector, tabIds = [] }) {
     negatives: [],
     tabs: {},
   };
-  await report({ text: 'Разбираю вкладки…' });
+  await report({ text: t('statusSortingTabs') });
   for (const other of await chrome.tabs.query({ windowId: state.windowId })) {
     await measure(state, other);
   }
@@ -222,7 +223,7 @@ const handlers = {
 chrome.runtime.onMessage.addListener((message, _sender, respond) => {
   if (message.type === 'model-progress') {
     // A download outlives a restarted worker, and nothing would clear the status afterwards.
-    if (isEmbedding()) report({ text: `Загружаю модель: ${message.progress}%` });
+    if (isEmbedding()) report({ text: t('statusModelProgress', message.progress) });
     return undefined;
   }
   const handler = handlers[message.type];
@@ -230,7 +231,7 @@ chrome.runtime.onMessage.addListener((message, _sender, respond) => {
   handler(message).then(
     () => respond({ ok: true }),
     async (error) => {
-      await report({ text: `Не получилось: ${error.message}`, error: true });
+      await report({ text: t('statusFailed', error.message), error: true });
       respond({ error: error.message });
     },
   );

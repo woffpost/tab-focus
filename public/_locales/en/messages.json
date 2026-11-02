@@ -1,0 +1,65 @@
+{
+  "extName": {
+    "message": "Tab Focus"
+  },
+  "extDescription": {
+    "message": "Name a topic: its tabs gather together, and the rest fold into a separate group."
+  },
+  "topicLabel": {
+    "message": "What are you focusing on?"
+  },
+  "topicPlaceholder": {
+    "message": "for example, AI agents, LLM, Claude API"
+  },
+  "topicHint": {
+    "message": "Describe the subject, not the goal: “AI agents, LLM” works better than “I want to become an AI engineer”."
+  },
+  "startButton": {
+    "message": "Start focus"
+  },
+  "suggestButton": {
+    "message": "Suggest topics from my tabs"
+  },
+  "noSuggestions": {
+    "message": "No clear topics found: the tabs are too different. Describe the topic yourself."
+  },
+  "stopButton": {
+    "message": "Exit"
+  },
+  "markOnButton": {
+    "message": "This is on topic"
+  },
+  "markOffButton": {
+    "message": "Remove"
+  },
+  "thresholdLabel": {
+    "message": "Threshold"
+  },
+  "thresholdAuto": {
+    "message": "auto"
+  },
+  "verdictOn": {
+    "message": "This tab is on the topic “$1”."
+  },
+  "verdictOff": {
+    "message": "This tab is not about “$1”. When you leave it, it will fold into “$2”."
+  },
+  "offGroupTitle": {
+    "message": "Off topic"
+  },
+  "statusLoadingModel": {
+    "message": "Loading the model…"
+  },
+  "statusModelProgress": {
+    "message": "Loading the model: $1%"
+  },
+  "statusReadingTabs": {
+    "message": "Looking at the tabs…"
+  },
+  "statusSortingTabs": {
+    "message": "Sorting the tabs…"
+  },
+  "statusFailed": {
+    "message": "Something went wrong: $1"
+  }
+}

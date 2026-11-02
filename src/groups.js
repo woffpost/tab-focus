@@ -1,4 +1,5 @@
-import { FOCUS_TITLE_PREFIX, OFF_TITLE, isOwnGroupTitle, placement } from './logic.js';
+import { t } from './i18n.js';
+import { FOCUS_TITLE_PREFIX, OFF_TITLE_PREFIX, isOwnGroupTitle, placement } from './logic.js';
 
 const RETRY_ATTEMPTS = 6;
 const RETRY_DELAY_MS = 250;
@@ -68,7 +69,11 @@ export async function placeTabs(state, tabs) {
       });
     }
     if (off.length) {
-      await moveToGroup(state, off, 'offGroupId', { title: OFF_TITLE, color: 'grey', collapsed: true });
+      await moveToGroup(state, off, 'offGroupId', {
+        title: OFF_TITLE_PREFIX + t('offGroupTitle'),
+        color: 'grey',
+        collapsed: true,
+      });
       await collapseOff(state);
     }
   } catch (error) {

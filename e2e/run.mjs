@@ -20,7 +20,11 @@ const dist = resolve('dist');
 const context = await chromium.launchPersistentContext(profile, {
   channel: 'chromium',
   headless: true,
-  args: [`--disable-extensions-except=${dist}`, `--load-extension=${dist}`],
+  args: [
+    `--disable-extensions-except=${dist}`,
+    `--load-extension=${dist}`,
+    ...(process.env.E2E_LANG ? [`--lang=${process.env.E2E_LANG}`] : []),
+  ],
 });
 const errors = [];
 
@@ -199,7 +203,7 @@ try {
   await open(leftover);
   await inTab(async (tabId) => {
     const groupId = await chrome.tabs.group({ tabIds: tabId });
-    await chrome.tabGroups.update(groupId, { title: 'Не по теме' });
+    await chrome.tabGroups.update(groupId, { title: '💤 left from an earlier run' });
   }, (await tabByTitle(leftover)).id);
 
   await popup.bringToFront();

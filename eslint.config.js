@@ -9,7 +9,7 @@ export default [
     languageOptions: { globals: { ...globals.browser, ...globals.webextensions } },
   },
   {
-    files: ['*.{js,mjs}', 'test/**', 'e2e/**', 'eval/**'],
+    files: ['*.{js,mjs}', 'scripts/**', 'test/**', 'e2e/**', 'eval/**'],
     languageOptions: { globals: { ...globals.node, ...globals.webextensions } },
   },
   { rules: { 'no-unused-vars': ['error', { argsIgnorePattern: '^_' }] } },

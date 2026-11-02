@@ -162,7 +162,9 @@ test('a dismissed tab hands over to the closest tab outside the off group', () =
 });
 
 test('leftover groups are recognised by title, the user groups are not', () => {
-  assert.equal(isOwnGroupTitle('Не по теме'), true);
+  assert.equal(isOwnGroupTitle('💤 Не по теме'), true);
+  assert.equal(isOwnGroupTitle('💤 Off topic · 3'), true);
+  assert.equal(isOwnGroupTitle('Не по теме'), false);
   assert.equal(isOwnGroupTitle('🎯 налоги Молдовы'), true);
   assert.equal(isOwnGroupTitle('Работа'), false);
   assert.equal(isOwnGroupTitle(undefined), false);

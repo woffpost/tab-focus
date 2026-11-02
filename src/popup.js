@@ -1,3 +1,5 @@
+import { t } from './i18n.js';
+
 /** @type {(id: string) => any} */
 const $ = (id) => document.getElementById(id);
 
@@ -15,7 +17,7 @@ const activeTab = async () => (await chrome.tabs.query({ active: true, currentWi
 const markActive = async (on) => send({ type: 'mark', tabId: (await activeTab()).id, on });
 
 const showThreshold = (value, auto = false) => {
-  $('threshold-value').textContent = `${value.toFixed(2)}${auto ? ' · авто' : ''}`;
+  $('threshold-value').textContent = `${value.toFixed(2)}${auto ? ` · ${t('thresholdAuto')}` : ''}`;
 };
 
 function renderStatus(status) {
@@ -47,8 +49,8 @@ async function renderVerdict(state) {
 
   $('verdict').classList.toggle('on', record.on);
   $('verdict-text').textContent = record.on
-    ? `Эта вкладка по теме «${state.topic}».`
-    : `Эта вкладка не про «${state.topic}». Когда уйдёшь с неё, она свернётся в «Не по теме».`;
+    ? t('verdictOn', state.topic)
+    : t('verdictOff', state.topic, t('offGroupTitle'));
   $('mark-on').hidden = record.on;
   $('mark-off').hidden = !record.on && tab.groupId === state.offGroupId;
 }
@@ -88,6 +90,16 @@ async function render() {
   await renderVerdict(state);
 }
 
+function translatePage() {
+  document.documentElement.lang = chrome.i18n.getUILanguage();
+  for (const node of document.querySelectorAll('[data-i18n]')) {
+    node.textContent = t(node.getAttribute('data-i18n'));
+  }
+  for (const node of document.querySelectorAll('[data-i18n-placeholder]')) {
+    node.setAttribute('placeholder', t(node.getAttribute('data-i18n-placeholder')));
+  }
+}
+
 $('start').addEventListener('submit', (event) => {
   event.preventDefault();
   const topic = $('topic').value.trim();
@@ -102,5 +114,6 @@ $('threshold').addEventListener('change', () => {
   send({ type: 'threshold', value: Number($('threshold').value) });
 });
 
+translatePage();
 chrome.storage.session.onChanged.addListener(render);
 render();

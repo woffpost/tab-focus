@@ -1,0 +1,65 @@
+{
+  "extName": {
+    "message": "Tab Focus"
+  },
+  "extDescription": {
+    "message": "Назови тему — вкладки по ней окажутся рядом, а остальные свернутся в отдельную группу."
+  },
+  "topicLabel": {
+    "message": "На чём фокусируемся?"
+  },
+  "topicPlaceholder": {
+    "message": "например, AI-агенты, LLM, Claude API"
+  },
+  "topicHint": {
+    "message": "Опиши предмет, а не цель: точнее работает «AI-агенты, LLM», чем «хочу стать AI Engineer»."
+  },
+  "startButton": {
+    "message": "Включить фокус"
+  },
+  "suggestButton": {
+    "message": "Предложить темы из вкладок"
+  },
+  "noSuggestions": {
+    "message": "Явных тем не нашлось: вкладки слишком разные. Опиши тему сам."
+  },
+  "stopButton": {
+    "message": "Выйти"
+  },
+  "markOnButton": {
+    "message": "Это по теме"
+  },
+  "markOffButton": {
+    "message": "Убрать"
+  },
+  "thresholdLabel": {
+    "message": "Порог"
+  },
+  "thresholdAuto": {
+    "message": "авто"
+  },
+  "verdictOn": {
+    "message": "Эта вкладка по теме «$1»."
+  },
+  "verdictOff": {
+    "message": "Эта вкладка не про «$1». Когда уйдёшь с неё, она свернётся в «$2»."
+  },
+  "offGroupTitle": {
+    "message": "Не по теме"
+  },
+  "statusLoadingModel": {
+    "message": "Загружаю модель…"
+  },
+  "statusModelProgress": {
+    "message": "Загружаю модель: $1%"
+  },
+  "statusReadingTabs": {
+    "message": "Смотрю на вкладки…"
+  },
+  "statusSortingTabs": {
+    "message": "Разбираю вкладки…"
+  },
+  "statusFailed": {
+    "message": "Не получилось: $1"
+  }
+}

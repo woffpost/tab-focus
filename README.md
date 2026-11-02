@@ -1,35 +1,41 @@
 # Tab Focus
 
-Chrome-расширение: называешь тему, вкладки по ней собираются в цветную группу, остальные сворачиваются в «Не по теме». Вкладки не закрываются. Заголовки обрабатываются локальной моделью и не покидают браузер.
+A Chrome extension for staying on one topic. Name the topic, and its tabs gather into a coloured group while the rest fold into a separate one. Nothing gets closed. Titles are compared by a model running inside the browser, so they never leave your machine.
 
-## Запуск
+The interface is available in English and Russian, and it follows the browser's language.
 
-Нужны Node.js 22+ и Chrome 117+.
+## Getting started
+
+Requires Node.js 22+ and Chrome 117+.
 
 ```
 npm install
 npm run build
 ```
 
-`chrome://extensions` → режим разработчика → «Загрузить распакованное» → папка `dist`. При первом включении фокуса скачивается модель (около 120 МБ).
+Open `chrome://extensions`, turn on developer mode, choose "Load unpacked" and select the `dist` folder. The first focus session downloads the model (about 120 MB) from Hugging Face. After that the network is not used.
 
-## Как это устроено
+## How it works
 
-| Файл | Что делает |
+Tab titles and the topic are turned into embeddings with `paraphrase-multilingual-MiniLM-L12-v2`, which handles mixed Russian, Romanian and English titles. A tab is on topic when it scores at least half of the best tab's score.
+
+Pinned tabs and groups you created yourself are never touched.
+
+| File | Role |
 | --- | --- |
-| `src/logic.js` | Чистые решения без Chrome API: по теме ли вкладка, порог, кластеризация, подпись темы |
-| `src/background.js` | Сессия фокуса: события вкладок, сообщения от попапа, очередь задач |
-| `src/groups.js` | Работа с группами вкладок и значком |
-| `src/embedder.js` | Запросы к модели из service worker |
-| `src/offscreen.js` | Сама модель: service worker не может её запустить, поэтому она живёт в offscreen-документе |
-| `src/popup.js` | Интерфейс: показывает состояние из `chrome.storage.session` и отправляет команды |
+| `src/logic.js` | Pure decisions without Chrome APIs: scoring, thresholds, clustering, labels |
+| `src/background.js` | The focus session: tab events, popup messages, the task queue |
+| `src/groups.js` | Tab groups and the badge |
+| `src/embedder.js` | Requests to the model from the service worker |
+| `src/offscreen.js` | The model itself, in an offscreen document, since a service worker cannot run it |
+| `src/popup.js` | The interface: shows state from `chrome.storage.session` and sends commands |
 
-Модель — `paraphrase-multilingual-MiniLM-L12-v2`: сравниваются эмбеддинги заголовка вкладки и темы. Сеть нужна только для скачивания модели с Hugging Face, версия закреплена в `src/offscreen.js`.
+## Checks
 
-Закреплённые вкладки и группы, созданные пользователем, расширение не трогает.
+- `npm run check`: lint, types and unit tests
+- `npm run e2e`: builds the extension and drives it in real Chromium with the real model
+- `npm run eval`: model accuracy on the labelled tabs in `eval/cases.json`
 
-## Проверки
+## License
 
-- `npm run check` — линтер, типы и тесты логики
-- `npm run e2e` — сборка и расширение в настоящем Chromium с настоящей моделью
-- `npm run eval` — точность моделей на размеченных вкладках из `eval/cases.json`
+[MIT](LICENSE)

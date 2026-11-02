@@ -3,7 +3,7 @@ export const THRESHOLD_SHARE = 0.5;
 export const LEARNED_THRESHOLD = 0.6;
 export const CLUSTER_LINKAGE = 0.4;
 export const FOCUS_TITLE_PREFIX = '🎯 ';
-export const OFF_TITLE = 'Не по теме';
+export const OFF_TITLE_PREFIX = '💤 ';
 export const NO_GROUP = -1;
 
 // The model returns unit vectors, so the dot product is the cosine.
@@ -50,7 +50,9 @@ export const isManaged = (tab, { windowId, focusGroupId, offGroupId }) =>
   !tab.pinned &&
   [NO_GROUP, focusGroupId, offGroupId].includes(tab.groupId);
 
-export const isOwnGroupTitle = (title = '') => title === OFF_TITLE || title.startsWith(FOCUS_TITLE_PREFIX);
+// The markers do not depend on the language, and a user's group called "Off topic" stays theirs.
+export const isOwnGroupTitle = (title = '') =>
+  title.startsWith(FOCUS_TITLE_PREFIX) || title.startsWith(OFF_TITLE_PREFIX);
 
 // 'stay' covers the active tab: an off-topic page is never pulled out from under the user.
 export function placement(tab, { on }, { focusGroupId, offGroupId }) {
