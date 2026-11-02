@@ -8,7 +8,7 @@
 <body>
   <form id="start">
     <label for="topic">На чём фокусируемся?</label>
-    <input id="topic" placeholder="например, AI-агенты, LLM, Claude API" autocomplete="off" required />
+    <input id="topic" placeholder="например, AI-агенты, LLM, Claude API" autocomplete="off" maxlength="80" required autofocus />
     <p class="hint">Опиши предмет, а не цель: точнее работает «AI-агенты, LLM», чем «хочу стать AI Engineer».</p>
     <button type="submit">Включить фокус</button>
     <button type="button" id="suggest" class="quiet">Предложить темы из вкладок</button>
@@ -22,7 +22,7 @@
       <button id="stop" class="quiet">Выйти</button>
     </div>
     <div id="verdict" hidden>
-      <p id="verdict-text"></p>
+      <p id="verdict-text" role="status"></p>
       <div class="row">
         <button id="mark-on" class="quiet">Это по теме</button>
         <button id="mark-off" class="quiet">Убрать</button>
@@ -34,7 +34,7 @@
     <ul id="tabs"></ul>
   </section>
 
-  <p id="status" hidden></p>
+  <p id="status" role="status" hidden></p>
   <script type="module" src="popup.js"></script>
 </body>
 </html>

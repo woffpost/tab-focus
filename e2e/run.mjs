@@ -119,6 +119,62 @@ try {
   assert.equal((await tabByTitle(offA)).groupId, s.offGroupId, 'one mark must not pull in unrelated tabs');
   console.log('ok: "Это по теме" moves the tab and teaches');
 
+  const statusNow = async () => (await inTab(() => chrome.storage.session.get('status'))).status;
+  const badge = (tabId) => inTab((i) => chrome.action.getBadgeText({ tabId: i }), tabId);
+  const judged = (title) =>
+    until(`${title} judged`, async () => {
+      const t = await tabByTitle(title);
+      return t && (await state()).tabs[t.id];
+    });
+  const focusOn = async (title) => inTab((i) => chrome.tabs.update(i, { active: true }), (await tabByTitle(title)).id);
+
+  const reloaded = 'Prognoza meteo Paris';
+  const reloadedPage = await open(reloaded);
+  await judged(reloaded);
+  await reloadedPage.reload();
+  await until('badge back after reload', async () => (await badge((await tabByTitle(reloaded)).id)) === '!');
+  console.log('ok: a reload keeps the badge');
+
+  // Opened as a page, the popup sees itself as the active tab, so it is pointed at the real one.
+  await popup.evaluate((tab) => {
+    chrome.tabs.query = async () => [tab];
+    return chrome.storage.session.set({ rerender: Date.now() });
+  }, await tabByTitle(reloaded));
+  await popup.waitForSelector('#mark-off:visible');
+  await popup.click('#mark-off');
+  await until('dismissed', async () => (await tabByTitle(reloaded)).groupId === (await state()).offGroupId);
+  assert.equal(await statusNow(), null, '"Убрать" works on the tab being read');
+  const dismissed = await tabByTitle(reloaded);
+  assert.equal(dismissed.active, false, 'the user is taken to another tab');
+  assert.equal(dismissed.groupId, (await state()).offGroupId, 'dismissed tab goes off');
+  console.log('ok: "Убрать" on the active tab');
+
+  await focusOn(offA);
+  const background = 'Bilete de avion ieftine';
+  await inTab((u) => chrome.tabs.create({ url: u, active: false }), url(background));
+  await judged(background);
+  await until('background tab placed', async () => (await tabByTitle(background)).groupId === s.offGroupId);
+  assert.equal((await inTab((g) => chrome.tabGroups.get(g), s.offGroupId)).collapsed, false, 'tab being read stays visible');
+  await focusOn(onRu);
+  await until('off group collapsed on leave', async () => (await inTab((g) => chrome.tabGroups.get(g), s.offGroupId)).collapsed);
+  console.log('ok: the off group does not collapse over the tab being read');
+
+  const moved = 'Pantofi sport de alergare';
+  await open(moved);
+  await judged(moved);
+  const movedId = (await tabByTitle(moved)).id;
+  await inTab(([tabIds, groupId]) => chrome.tabs.group({ tabIds, groupId }), [movedId, ownGroup]);
+  const pinnedLater = 'Concert tickets Vienna';
+  await open(pinnedLater);
+  await judged(pinnedLater);
+  const pinnedLaterId = (await tabByTitle(pinnedLater)).id;
+  await inTab((i) => chrome.tabs.update(i, { pinned: true }), pinnedLaterId);
+  await focusOn(onRu);
+  await until('moved tabs forgotten', async () => !(await state()).tabs[pinnedLaterId]);
+  assert.equal((await tabByTitle(pinnedLater)).pinned, true, 'pinned tab stays pinned');
+  assert.equal((await tabByTitle(moved)).groupId, ownGroup, 'a tab the user took into a group stays there');
+  console.log('ok: tabs the user pinned or took into a group are left alone');
+
   await popup.evaluate(() => chrome.runtime.sendMessage({ type: 'threshold', value: 0.05 }));
   s = await state();
   assert.equal(s.autoThreshold, false, 'slider turns the automatic threshold off');
@@ -139,6 +195,13 @@ try {
   console.log('ok: exit restores ungrouped tabs, user group kept');
 
   for (const title of ['Рецепт пиццы маргарита', 'Рецепт домашней пасты', 'Рецепт томатного соуса']) await open(title);
+  const leftover = 'Lista de cumparaturi';
+  await open(leftover);
+  await inTab(async (tabId) => {
+    const groupId = await chrome.tabs.group({ tabIds: tabId });
+    await chrome.tabGroups.update(groupId, { title: 'Не по теме' });
+  }, (await tabByTitle(leftover)).id);
+
   await popup.bringToFront();
   await popup.click('#suggest');
   await popup.waitForSelector('#suggestions button', { timeout: 60000 });
@@ -148,9 +211,17 @@ try {
   const index = suggestions.findIndex(({ tabIds }) => tabIds.includes(pizza));
   assert.notEqual(index, -1, 'cooking tabs form a suggestion');
   console.log('suggestions:', suggestions.map(({ label, tabIds }) => `${label} [${tabIds.length}]`).join(' / '));
-  await popup.locator('#suggestions button').nth(index).click();
+  await popup.locator('#suggestions button').nth(index).evaluate((button) => {
+    button.click();
+    button.click();
+  });
   await until('picked', async () => (await state())?.active);
+  // Handlers run in order, so this answers only after the second click has been handled.
+  await popup.evaluate(() => chrome.runtime.sendMessage({ type: 'pick', index: -1 }));
+  assert.equal(await statusNow(), null, 'a double click on a suggestion leaves no error');
   s = await state();
+  const leftoverGroup = (await tabByTitle(leftover)).groupId;
+  assert.ok([s.focusGroupId, s.offGroupId, -1].includes(leftoverGroup), 'a leftover group is dissolved');
   assert.equal((await tabByTitle('Рецепт пиццы маргарита')).groupId, s.focusGroupId, 'member in focus');
   assert.equal((await tabByTitle(onRu)).groupId, s.offGroupId, 'unrelated tab goes off');
   assert.equal((await tabByTitle(own)).groupId, ownGroup, 'user group untouched by suggestions');
@@ -162,7 +233,8 @@ try {
   });
   assert.equal((await tabByTitle(added)).groupId, s.focusGroupId, 'new related tab joins the focus');
   console.log('ok: picking a suggestion focuses on the group and judges new tabs against it');
-  console.log('worker errors:', errors.length ? errors : 'none');
+  assert.deepEqual(errors, [], 'no errors in the service worker');
+  console.log('ok: no errors in the service worker');
 } finally {
   await context.close();
   server.close();

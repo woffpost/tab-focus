@@ -1,23 +1,32 @@
 {
   "name": "tab-focus",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "node --test",
-    "build": "node build.mjs",
-    "eval": "node eval/run.mjs",
-    "e2e": "node e2e/run.mjs"
-  },
-  "keywords": [],
-  "author": "",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Chrome extension that groups tabs by a topic using a local embedding model.",
   "license": "ISC",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test",
+    "lint": "eslint .",
+    "typecheck": "tsc",
+    "check": "npm run lint && npm run typecheck && npm test",
+    "e2e": "npm run build && node e2e/run.mjs",
+    "eval": "node eval/run.mjs"
+  },
   "dependencies": {
     "@huggingface/transformers": "^4.3.2"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/chrome": "^0.3.7",
     "esbuild": "^0.28.2",
-    "playwright": "^1.64.1"
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "playwright": "^1.64.1",
+    "typescript": "^7.0.2"
   }
 }

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "target": "es2023",
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable"
+    ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": [
+      "chrome"
+    ],
+    "skipLibCheck": true,
+    "strict": false
+  },
+  "include": [
+    "src"
+  ]
+}

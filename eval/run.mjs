@@ -1,12 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { pipeline } from '@huggingface/transformers';
+import { cosine } from '../src/logic.js';
 
 const MODELS = [
   ['Xenova/paraphrase-multilingual-MiniLM-L12-v2', { topic: (t) => t, tab: (t) => t }],
   ['Xenova/multilingual-e5-small', { topic: (t) => `query: ${t}`, tab: (t) => `passage: ${t}` }],
 ];
 const cases = JSON.parse(readFileSync(new URL('./cases.json', import.meta.url)));
-const cos = (a, b) => a.reduce((s, v, i) => s + v * b[i], 0);
 const views = {
   title: (t) => t.title,
   'title+host': (t) => `${t.title} ${new URL(t.url).hostname.replace(/^www\./, '')}`,
@@ -25,7 +25,7 @@ for (const [name, prefix] of MODELS) {
     const rows = [];
     for (const c of cases) {
       const q = await embed(prefix.topic(c.topic));
-      for (const t of c.tabs) rows.push({ topic: c.topic, on: t.on, title: t.title, s: cos(q, await embed(prefix.tab(text(t)))) });
+      for (const t of c.tabs) rows.push({ topic: c.topic, on: t.on, title: t.title, s: cosine(q, await embed(prefix.tab(text(t)))) });
     }
     let best = { acc: 0 };
     for (let th = 0.05; th < 0.95; th += 0.01) {

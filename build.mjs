@@ -11,6 +11,8 @@ await build({
   outdir: 'dist',
   bundle: true,
   format: 'esm',
+  target: 'chrome117',
+  minify: true,
   logLevel: 'warning',
 });
 
